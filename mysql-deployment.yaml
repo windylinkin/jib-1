@@ -1,0 +1,64 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    fabric8.io/iconUrl: https://raw.githubusercontent.com/docker-library/docs/c408469abbac35ad1e4a50a6618836420eb9502e/mysql/logo.png
+  labels:
+    app: mk-mysql
+    provider: monkeyk
+    version: "5.6"
+    group: com.monkeyk
+  name: mk-mysql
+  namespace: monkeyk
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mk-mysql
+      provider: monkeyk
+      group: com.monkeyk
+  template:
+    metadata:
+      annotations:
+        fabric8.io/iconUrl: https://raw.githubusercontent.com/docker-library/docs/c408469abbac35ad1e4a50a6618836420eb9502e/mysql/logo.png
+      labels:
+        app: mk-mysql
+        provider: monkeyk
+        group: com.monkeyk
+    spec:
+      volumes:
+      - name: mk-mysql-data
+        persistentVolumeClaim:
+          claimName: mk-mysql-data
+      containers:
+      - env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "asdewq"
+        - name: MYSQL_USER
+          value: "monkeyk"
+        - name: MYSQL_PASSWORD
+          value: "asdewq"
+        image: "mysql:5.6"
+        imagePullPolicy: IfNotPresent
+        name: mk-mysql
+        ports:
+        - containerPort: 3306
+          protocol: TCP
+          name: http
+        volumeMounts:
+        - name: mk-mysql-data
+          mountPath: /var/lib/mysql
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: mk-mysql-data
+  namespace: monkeyk
+  annotations:
+    volume.beta.kubernetes.io/storage-class: standard
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 2Gi
