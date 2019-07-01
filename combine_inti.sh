@@ -9,6 +9,7 @@ then
 else
     echo "网卡正常。"
 fi
+yum -y install socat
 yum clean all && yum repolist
 yum install -y yum-utils device-mapper-persistent-data lvm2
 yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
