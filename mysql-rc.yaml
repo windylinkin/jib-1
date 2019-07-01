@@ -1,0 +1,33 @@
+kind: ReplicationController
+metadata:
+  name: my-mysql-v1
+  namespace: default
+  labels:
+    name: my-mysql
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    name: my-mysql
+    version: v1
+  template:
+    metadata:
+      labels:
+        name: my-mysql
+        version: v1
+    spec:
+      containers:
+        - image: reg.docker.tb/harbor/mysql:latest
+          name: my-mysql-v1
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: abcd123
+          volumeMounts:
+            - name: mysql-storage
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: mysql-storage
+          hostPath:
+            path: /data/mysql
