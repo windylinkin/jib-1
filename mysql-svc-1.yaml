@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    fabric8.io/iconUrl: >-
+            https://raw.githubusercontent.com/docker-library/docs/c408469abbac35ad1e4a50a6618836420eb9502e/mysql/logo.png
+  labels:
+    expose: "true"
+    app: mk-mysql
+    group: com.monkeyk
+    provider: monkeyk
+    version: '5.6'
+  name: mk-mysql
+  namespace: monkeyk
+spec:
+  type: NodePort
+  ports:
+  - name: http
+    port: 80
+    nodePort: 30802
+    protocol: TCP
+    targetPort: 3306
+  selector:
+    app: mk-mysql
+    group: com.monkeyk
+    provider: monkeyk
